@@ -23,7 +23,7 @@ class ChatBotWindow(QMainWindow):
         # Add chat area widget:
         self.chat_area = QTextEdit(self)
         font = self.chat_area.font()
-        font.setPointSize(23)
+        font.setPointSize(20)
         self.chat_area.setFont(font)
         self.chat_area.setReadOnly(True)
         # 10 significa o padx, ou seja, distância da borda no x e do y. 480 de 700 e 320 de 500
@@ -60,8 +60,10 @@ class ChatBotWindow(QMainWindow):
 
     def get_bot_response(self, user_input):
         response = self.chatbot.get_response(user_input)
-        print(response)
-        self.chat_area.append(f'<p style="color:#FFD700; background-colour: #E9E9E9">{response}</p>')
+        for paragraph in response.split("\n"):
+            self.chat_area.append(f'<p style="color:#FFD700; background-colour: #E9E9E9">{paragraph}</p>')
+        else:
+            self.chat_area.append('<p style="color:#FFD700; background-colour: #E9E9E9">\n</p>')
 
     @staticmethod
     def about():
