@@ -3,6 +3,7 @@ from PyQt6.QtGui import QAction
 import sys
 from os import getenv
 from groq import Groq
+import threading
 
 
 class ChatBotWindow(QMainWindow):
@@ -24,6 +25,7 @@ class ChatBotWindow(QMainWindow):
         font = self.chat_area.font()
         font.setPointSize(23)
         self.chat_area.setFont(font)
+        self.chat_area.setReadOnly(True)
         # 10 significa o padx, ou seja, distância da borda no x e do y. 480 de 700 e 320 de 500
         self.chat_area.setGeometry(30, 50, 1350, 700)
 
@@ -32,6 +34,7 @@ class ChatBotWindow(QMainWindow):
         font = self.input_field.font()
         font.setPointSize(23)  # Altere o tamanho da fonte aqui (por exemplo, 16)
         self.input_field.setFont(font)
+        self.input_field.returnPressed.connect(self.send_message)
         self.input_field.setGeometry(30, 770, 1350, 60)
 
         # Add the button
@@ -52,8 +55,12 @@ class ChatBotWindow(QMainWindow):
             self.chat_area.append(f'<p style="color:#008000">Me: {user_input}</p>')
             self.input_field.clear()
 
-            response = self.chatbot.get_response(user_input)
-            self.chat_area.append(f'<p style="color:#FFD700; background-colour: #E9E9E9">{response}</p>')
+            thread = threading.Thread(target=self.get_bot_response, args=(user_input, ))
+            thread.start()
+
+    def get_bot_response(self, user_input):
+        response = self.chatbot.get_response(user_input)
+        self.chat_area.append(f'<p style="color:#FFD700; background-colour: #E9E9E9">{response}</p>')
 
     @staticmethod
     def about():
