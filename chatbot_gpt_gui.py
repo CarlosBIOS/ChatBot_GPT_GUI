@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QMainWindow, QApplication, QTextEdit, QLineEdit, QPushButton
+from PyQt6.QtWidgets import QMainWindow, QApplication, QTextEdit, QLineEdit, QPushButton, QMessageBox, QStatusBar
+from PyQt6.QtGui import QAction, QIcon
 import sys
 from os import getenv
 from groq import Groq
@@ -12,18 +13,30 @@ class ChatBotWindow(QMainWindow):
         self.setMinimumSize(1550, 750)
         self.setWindowTitle('ChatBot')
 
+        help_menu_item = self.menuBar().addMenu('&Help')
+
+        about_action = QAction('About', self)
+        about_action.triggered.connect(self.about)
+        help_menu_item.addAction(about_action)
+
         # Add chat area widget:
         self.chat_area = QTextEdit(self)
-        # # 10 significa o padx, ou seja, distância da borda no x e do y. 480 de 700 e 320 de 500
-        self.chat_area.setGeometry(30, 30, 1350, 700)
+        font = self.chat_area.font()
+        font.setPointSize(23)
+        self.chat_area.setFont(font)
+        # 10 significa o padx, ou seja, distância da borda no x e do y. 480 de 700 e 320 de 500
+        self.chat_area.setGeometry(30, 50, 1350, 700)
 
         # Add the input field widget
         self.input_field = QLineEdit(self)
-        self.input_field.setGeometry(30, 750, 1350, 60)
+        font = self.input_field.font()
+        font.setPointSize(23)  # Altere o tamanho da fonte aqui (por exemplo, 16)
+        self.input_field.setFont(font)
+        self.input_field.setGeometry(30, 770, 1350, 60)
 
         # Add the button
         self.button = QPushButton('Send', self)
-        self.button.setGeometry(1400, 750, 80, 60)
+        self.button.setGeometry(1400, 770, 80, 60)
         self.button.clicked.connect(self.send_message)
 
         self.showFullScreen()  # Usamos este método quando não existe setCenterWidget, como foi no student management
@@ -41,6 +54,26 @@ class ChatBotWindow(QMainWindow):
 
             response = self.chatbot.get_response(user_input)
             self.chat_area.append(f'<p style="color:#FFD700; background-colour: #E9E9E9">{response}</p>')
+
+    @staticmethod
+    def about():
+        about = AboutDialog()
+        about.exec()
+
+
+class AboutDialog(QMessageBox):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('About')
+        content: str = ("This application was created to assist you. It's inspired by "
+                        "ChatGPT and allows you to interact in a natural language way.\n\n"
+                        "**Features:**\n"
+                        "- Ask questions and receive informative responses.\n"
+                        "- Clear the chat history by typing 'clear'.\n"
+                        "- Exit the program by typing 'exit'.\n\n"
+                        "Developed by: Carlos Monteiro\n"
+                        "Version: 1.69\n")
+        self.setText(content)
 
 
 class ChatBot:
