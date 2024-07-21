@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QMainWindow, QApplication, QTextEdit, QLineEdit, QPushButton, QMessageBox, QStatusBar
-from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtGui import QAction
 import sys
 from os import getenv
 from groq import Groq
