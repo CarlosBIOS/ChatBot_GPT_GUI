@@ -59,7 +59,8 @@ class ChatBotWindow(QMainWindow):
         self.input_field.clear()
 
     def get_bot_response(self, user_input):
-        response = self.chatbot.get_response(user_input)
+        response = self.chatbot.get_response(user_input).replace('\n\n', '\n')
+
         for paragraph in response.split("\n"):
             self.chat_area.append(f'<p style="color:#FFD700; background-colour: #E9E9E9">{paragraph}</p>')
         else:
