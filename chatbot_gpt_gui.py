@@ -26,7 +26,7 @@ class ChatBotWindow(QMainWindow):
         self.chat_area.setFont(font)
         self.chat_area.setReadOnly(True)
         # 10 significa o padx, ou seja, distância da borda no x e do y. 480 de 700 e 320 de 500
-        self.chat_area.setGeometry(30, 50, 1350, 700)
+        self.chat_area.setGeometry(40, 50, 1450, 700)
 
         # Add the input field widget
         self.input_field = QLineEdit(self)
@@ -34,11 +34,11 @@ class ChatBotWindow(QMainWindow):
         font.setPointSize(23)  # Altere o tamanho da fonte aqui (por exemplo, 16)
         self.input_field.setFont(font)
         self.input_field.returnPressed.connect(self.send_message)
-        self.input_field.setGeometry(30, 770, 1350, 60)
+        self.input_field.setGeometry(40, 770, 1350, 60)
 
         # Add the button
         self.button = QPushButton('Send', self)
-        self.button.setGeometry(1400, 770, 80, 60)
+        self.button.setGeometry(1400, 770, 90, 60)
         self.button.clicked.connect(self.send_message)
 
         self.showFullScreen()  # Usamos este método quando não existe setCenterWidget, como foi no student management
@@ -82,7 +82,7 @@ class AboutDialog(QMessageBox):
                         "- Clear the chat history by typing 'clear'.\n"
                         "- Exit the program by typing 'exit'.\n\n"
                         "Developed by: Carlos Monteiro\n"
-                        "Version: 1.69\n")
+                        "Version: 1.0\n")
         self.setText(content)
 
 
