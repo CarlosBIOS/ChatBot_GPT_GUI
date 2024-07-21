@@ -22,7 +22,7 @@ class ChatBotWindow(QMainWindow):
         # Add chat area widget:
         self.chat_area = QTextEdit(self)
         font = self.chat_area.font()
-        font.setPointSize(20)
+        font.setPointSize(19)
         self.chat_area.setFont(font)
         self.chat_area.setReadOnly(True)
         # 10 significa o padx, ou seja, distância da borda no x e do y. 480 de 700 e 320 de 500
@@ -31,7 +31,7 @@ class ChatBotWindow(QMainWindow):
         # Add the input field widget
         self.input_field = QLineEdit(self)
         font = self.input_field.font()
-        font.setPointSize(23)  # Altere o tamanho da fonte aqui (por exemplo, 16)
+        font.setPointSize(20)  # Altere o tamanho da fonte aqui (por exemplo, 16)
         self.input_field.setFont(font)
         self.input_field.returnPressed.connect(self.send_message)
         self.input_field.setGeometry(40, 770, 1350, 60)
