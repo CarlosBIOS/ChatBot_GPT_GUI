@@ -48,18 +48,19 @@ class ChatBotWindow(QMainWindow):
         user_input: str = self.input_field.text().strip()
         if user_input.casefold() == 'clear':
             self.chat_area.clear()
-            self.input_field.clear()
         elif user_input.casefold() == 'exit':
             sys.exit(app.exec())
         else:
             self.chat_area.append(f'<p style="color:#008000">Me: {user_input}</p>')
-            self.input_field.clear()
 
             thread = threading.Thread(target=self.get_bot_response, args=(user_input, ))
             thread.start()
 
+        self.input_field.clear()
+
     def get_bot_response(self, user_input):
         response = self.chatbot.get_response(user_input)
+        print(response)
         self.chat_area.append(f'<p style="color:#FFD700; background-colour: #E9E9E9">{response}</p>')
 
     @staticmethod
@@ -105,7 +106,7 @@ class ChatBot:
             "role": "assistant",
             "content": response.choices[0].message.content
         })
-        # Print the response
+
         return "Assistant: " + response.choices[0].message.content
 
 
