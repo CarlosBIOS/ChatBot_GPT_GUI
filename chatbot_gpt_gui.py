@@ -11,7 +11,6 @@ class ChatBotWindow(QMainWindow):
         super().__init__()
         self.chatbot = ChatBot()
 
-        self.setMinimumSize(1550, 750)
         self.setWindowTitle('ChatBot')
 
         help_menu_item = self.menuBar().addMenu('&Help')
