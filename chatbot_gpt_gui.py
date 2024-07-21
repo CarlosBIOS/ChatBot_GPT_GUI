@@ -1,0 +1,75 @@
+from PyQt6.QtWidgets import QMainWindow, QApplication, QTextEdit, QLineEdit, QPushButton
+import sys
+from os import getenv
+from groq import Groq
+
+
+class ChatBotWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.chatbot = ChatBot()
+
+        self.setMinimumSize(1550, 750)
+        self.setWindowTitle('ChatBot')
+
+        # Add chat area widget:
+        self.chat_area = QTextEdit(self)
+        # # 10 significa o padx, ou seja, distância da borda no x e do y. 480 de 700 e 320 de 500
+        self.chat_area.setGeometry(30, 30, 1350, 700)
+
+        # Add the input field widget
+        self.input_field = QLineEdit(self)
+        self.input_field.setGeometry(30, 750, 1350, 60)
+
+        # Add the button
+        self.button = QPushButton('Send', self)
+        self.button.setGeometry(1400, 750, 80, 60)
+        self.button.clicked.connect(self.send_message)
+
+        self.showFullScreen()  # Usamos este método quando não existe setCenterWidget, como foi no student management
+
+    def send_message(self):
+        user_input: str = self.input_field.text().strip()
+        if user_input.casefold() == 'clear':
+            self.chat_area.clear()
+            self.input_field.clear()
+        elif user_input.casefold() == 'exit':
+            sys.exit(app.exec())
+        else:
+            self.chat_area.append(f'<p style="color:#008000">Me: {user_input}</p>')
+            self.input_field.clear()
+
+            response = self.chatbot.get_response(user_input)
+            self.chat_area.append(f'<p style="color:#FFD700; background-colour: #E9E9E9">{response}</p>')
+
+
+class ChatBot:
+    def __init__(self):
+        self.client = Groq(
+            api_key=getenv("key_grog"),
+        )
+        self.system_prompt = {
+            "role": "system",
+            "content": "You are a helpful assistant."
+        }
+        self.chat_history = [self.system_prompt]
+
+    def get_response(self, user_input: str):
+        # Append the user input to the chat history
+        self.chat_history.append({"role": "user", "content": user_input})
+
+        response = self.client.chat.completions.create(model="llama3-70b-8192", messages=self.chat_history,
+                                                       max_tokens=1000, temperature=1.2)
+        # Append the response to the chat history
+        self.chat_history.append({
+            "role": "assistant",
+            "content": response.choices[0].message.content
+        })
+        # Print the response
+        return "Assistant: " + response.choices[0].message.content
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main_window = ChatBotWindow()
+    sys.exit(app.exec())
